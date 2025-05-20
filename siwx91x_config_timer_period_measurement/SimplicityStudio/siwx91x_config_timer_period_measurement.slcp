@@ -1,0 +1,58 @@
+project_name: siwx91x_config_timer_period_measurement
+label: Peripheral Example - Config Timer - Period Measurement
+description: >
+  This application demonstrates how to configure the config timer to measure the period of a signal on GPIO pin.
+  The GPIO pin is configured as an input and the config timer is set to capture every two falling edges of the signal.
+
+category: example|Wi-Fi
+
+filter:
+- name: Device Type
+  value: [SoC]
+- name: Project Difficulty
+  value: [Beginner]
+
+package: platform
+
+quality: evaluation
+
+readme:
+- path: ../README.md
+
+source:
+- path: ../src/app.c
+- path: ../src/main.c
+
+include:
+  - path: '../inc'
+    file_list:
+    - path: app.h
+    
+component:
+  - id: sl_system
+  - id: status
+  - id: syscalls
+    from: wiseconnect3_sdk
+  - id: si91x_memory_default_config
+    from: wiseconnect3_sdk
+
+configuration: 
+  - name: SL_CT_MODE_32BIT_ENABLE_MACRO
+    value: "SL_COUNTER_32BIT"
+
+other_file:
+  - path: ../image/brd2605a_connectors.png
+    directory: "image"
+  - path: ../image/brd4338a_connectors.png
+    directory: "image"
+  - path: ../image/result.png
+    directory: "image"
+
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true
+
+sdk_extension:
+  - id: wiseconnect3_sdk
+    version: 3.4.2
