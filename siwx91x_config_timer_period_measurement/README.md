@@ -10,7 +10,7 @@
 
 ## Summary ##
 
-This project demonstrates period measurement using Config Timer. This project configures the timer to request an interrupt after falling edges occur. In the IRQ handler, in addition to saving the edge times, the overflow flag is checked in order to account for two edges that span the time during which the counter rolls over from 0xFFFFFFFF (Counter 0 is 32 bits wide) to 0.
+This project demonstrates period measurement using Config Timer. This project configures the timer to request an interrupt after falling edges occur. In the IRQ handler, in addition to saving the edge times, the overflow flag is checked in order to account for two edges that span the time during which the counter rolls over from 0xFFFFFFFF (Counter 0 is 32 bits wide) to 0...
 
 Upon exiting the IRQ handler, the period is calculated and returned as an integer value in microseconds, thus the measuredPeriod value will
 show 1000 for an input signal with a period of 1 kHz.
