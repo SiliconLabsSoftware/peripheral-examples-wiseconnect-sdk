@@ -3,10 +3,10 @@
 ![Type badge](https://img.shields.io/badge/Type-Application%20Examples-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Peripheral-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-41.71%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-18.67%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-40.71%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-18.65%20KB-blue)
 
 ## Summary ##
 
@@ -17,7 +17,7 @@ show 1000 for an input signal with a period of 1 kHz.
 
 ## SDK Version ##
 
-- [SiSDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2024.12.2)
+- [SiSDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ## Software Required ##
 
@@ -64,3 +64,9 @@ When a falling edge is detected, the Config Timer captures the event and stores 
 It is advised to check the result in debug mode as printing it out may affect the capturing process, leading to inaccurate reading. Connect the signal source to the input capture pin. Turn on the debug mode, add an appropriate breakpoint and check the period value, the result should be as followed:
 
 ![result](image/result.png)
+
+## Reporting Bugs/Issues and Posting Questions and Comments ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of this repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of this repo.

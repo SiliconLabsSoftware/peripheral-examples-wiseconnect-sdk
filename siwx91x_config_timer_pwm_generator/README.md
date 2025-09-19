@@ -1,21 +1,20 @@
-# Peripheral Example - Config Timer - Pulse Capture #
+# Peripheral Example - Config Timer - PWM Generator #
 
 ![Type badge](https://img.shields.io/badge/Type-Application%20Examples-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Peripheral-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 ![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-45.57%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-18.74%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-40.46%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-18.63%20KB-blue)
 
 ## Summary ##
 
-This project demonstrates how to configure the **config timer** to capture an input pulse. The GPIO pin is configured as an input and the **config timer** is set to capture every falling edges of the signal.
+This project demonstrates how to generate a PWM signal using the Config Timer peripheral. The timer is configured to toggle a GPIO pin at a specified frequency and duty cycle, creating a PWM output suitable for controlling devices such as motors, LEDs, or other peripherals requiring pulse-width modulation.
 
 ## SDK Version ##
 
 - [SiSDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [Wiseconnect v3.5.0](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.0)
 
 ## Software Required ##
 
@@ -23,42 +22,44 @@ This project demonstrates how to configure the **config timer** to capture an in
 
 ## Hardware Required ##
 
-- 1x Silicon Labs Si91x device:
+- 1x Silicon Labs Si91x device, such as:
   - [SIWX917-DK2605A](https://www.silabs.com/development-tools/wireless/wi-fi/siwx917-dk2605a-wifi-6-bluetooth-le-soc-dev-kit)
   - [SIWX917-RB4338A](https://www.silabs.com/development-tools/wireless/wi-fi/siwx917-rb4338a-wifi-6-bluetooth-le-soc-radio-board?tab=overview)
-- A source of pulse, which should be connected to the input GPIO
+- An oscilloscope or logic analyzer to observe the PWM output.
 
 ## Connections Required ##
 
-- Connect the pulse source to the input capture GPIO pin, which is GPIO_25 for both BRD2605A and BRD4338A (P25 on the breakout pad):
+- Connect the PWM output pin (for example, GPIO_29) to the device you want to control or to an oscilloscope/logic analyzer for measurement.
 
   ![brd4338a_connectors](image/brd4338a_connectors.png)
 
   ![brd2605a_connectors](image/brd2605a_connectors.png)
 
+> [!TIP]
+> Refer to the official Silicon Labs documentation for correct hardware layout and pin mapping.
+
 ## Setup ##
 
 ### Create from EXAMPLE PROJECTS & DEMOS ###
 
-1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the EXAMPLE PROJECTS & DEMOS tab. Find the example project filtering by "pulse capture".
+1. From the Launcher Home, add your hardware to My Products, click on it, and click on the EXAMPLE PROJECTS & DEMOS tab. Find the example project by filtering for "config timer - PWM generator".
 2. Create the project in Simplicity Studio.
 
 ### Create from an empty example project ###
 
 1. Create an "Empty C Project" for your board using Simplicity Studio v5. Use the default project settings.
 
-2. Copy `app.c` into the project root folder (overwriting existing file):
-
-3. Install software components:
-    - Open the .slcp file in the project.
-    - Select the SOFTWARE COMPONENTS tab.
-    - Install the following components:
-        - [WiSeConnect 3 SDK] → [Device] → [Si91x] → [MCU] → [Peripheral] → [GPIO]
+2. Copy `app.c` into the project root folder (overwriting existing file)
 
 ## How It Works ##
 
-Input capture is a functionality of the timer module that enables precise recording of the counter value when an external event, such as a rising or falling edge, is detected on a designated input pin. This feature is particularly advantageous for accurately determining the frequency, period, or pulse width of an input signal.
-When a falling edge is detected, the Config Timer captures the event and stores the captured value in a buffer.
+The Config Timer is set up to generate a PWM signal by toggling a GPIO pin at a specified frequency and duty cycle. The timer counts up to a value corresponding to the desired period, then toggles the output pin to create the high and low phases of the PWM waveform. By adjusting the timer's compare values, you can control both the frequency and the duty cycle of the PWM output.
+
+## Testing ##
+
+Connect the PWM output pin to an oscilloscope or logic analyzer. Observe the waveform and verify that the frequency and duty cycle match the configured values. You should see a stable PWM signal similar to the following:
+
+![result](image/result.png)
 
 ## Reporting Bugs/Issues and Posting Questions and Comments ##
 

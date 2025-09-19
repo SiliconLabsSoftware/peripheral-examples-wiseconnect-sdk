@@ -285,13 +285,12 @@ static void i2c_clock_init(I2C_TypeDef *i2c, sl_i2c_init_params_t *config)
     RSI_ULPSS_PeripheralEnable(ULPCLK, ULP_I2C_CLK, ENABLE_STATIC_CLK);
   }
 
-  if ((config->clhr == SL_I2C_FAST_PLUS_BUS_SPEED)
-      || (config->clhr == SL_I2C_HIGH_BUS_SPEED)) {
-    if ((uint32_t)i2c == I2C2_BASE) {
-      // Changing ULP Pro clock to SoC CLK for ULP I2C instance (I2C2) to run in FastPlus and HP modes
-      RSI_ULPSS_ClockConfig(M4CLK, ENABLE, 0, 0);
-      RSI_ULPSS_UlpProcClkConfig(ULPCLK, ULP_PROC_SOC_CLK, 0, 0);
-    }
+  if (((config->clhr == SL_I2C_FAST_PLUS_BUS_SPEED)
+       || (config->clhr == SL_I2C_HIGH_BUS_SPEED))
+      && ((uint32_t)i2c == I2C2_BASE)) {
+    // Changing ULP Pro clock to SoC CLK for ULP I2C instance (I2C2) to run in FastPlus and HP modes
+    RSI_ULPSS_ClockConfig(M4CLK, ENABLE, 0, 0);
+    RSI_ULPSS_UlpProcClkConfig(ULPCLK, ULP_PROC_SOC_CLK, 0, 0);
   }
   // Read the current M4 Core clock
   if (((uint32_t)i2c == I2C2_BASE)

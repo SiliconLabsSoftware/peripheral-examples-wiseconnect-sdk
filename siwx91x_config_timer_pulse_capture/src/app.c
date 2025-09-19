@@ -38,8 +38,7 @@
 /*******************************************************************************
  **********************  Local variables   *************************************
  ******************************************************************************/
-static volatile uint16_t flag;
-static volatile uint16_t capture_value;
+static volatile uint32_t capture_value;
 static volatile uint8_t data_ready;
 
 /*******************************************************************************
@@ -84,9 +83,7 @@ static void gpio_init(void)
 static void config_timer_init(void)
 {
   uint32_t ct_config_value = 0;
-  ct_config_value = 0;
   uint32_t interrupt_flags = 0;
-  interrupt_flags = 0;
 
   RSI_CLK_CtClkConfig(M4CLK, CT_SOCPLLCLK, SCT_CLOCK_DIV_FACT,
                       ENABLE_STATIC_CLK);
@@ -136,7 +133,6 @@ void app_process_action(void)
 {
   if (data_ready) {
     // clear flag here
-    flag = 0;
-    DEBUGOUT("capture value %d\n", capture_value);
+    DEBUGOUT("capture value %lu\n", capture_value);
   }
 }

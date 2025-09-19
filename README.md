@@ -14,8 +14,8 @@
 # Silicon Labs SiWx91x Peripheral Applications #
 
 
-[![Version Badge](https://img.shields.io/badge/-v1.0.0-green)](https://github.com/SiliconLabs/peripheral-examples-wiseconnect-sdk/releases)
-[![SDK Badge](https://img.shields.io/badge/SiSDK-v2024.12.2-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
+[![Version Badge](https://img.shields.io/badge/-v1.1.0-green)](https://github.com/SiliconLabs/peripheral-examples-wiseconnect-sdk/releases)
+[![SDK Badge](https://img.shields.io/badge/SiSDK-v2025.6.0-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 
 The Silicon Labs WiseConnect SDK allows for a wide variety of applications to be built on its foundation. This repo showcases some example applications built using the Silicon Labs WiseConnect SDK.
@@ -27,6 +27,9 @@ The Silicon Labs WiseConnect SDK allows for a wide variety of applications to be
 | 1  | Peripheral Example - Config Timer - Period Measurement | [Click Here](./siwx91x_config_timer_period_measurement) |
 | 2  | Peripheral Example - Config Timer - Pulse Capture | [Click Here](./siwx91x_config_timer_pulse_capture) |
 | 3  | Peripheral Example - I2C - Leader with Interrupts | [Click Here](./siwx91x_i2c_leader_interrupt) |
+| 4  | Peripheral Example - Config Timer - PWM Generator | [Click Here](./siwx91x_config_timer_pwm_generator) |
+| 5  | Peripheral Example - Config Timer - Gate Time Interval | [Click Here](./siwx91x_config_timer_fixed_gate_time_frequency_measurement/) |
+
 
 ## Documentation ##
 

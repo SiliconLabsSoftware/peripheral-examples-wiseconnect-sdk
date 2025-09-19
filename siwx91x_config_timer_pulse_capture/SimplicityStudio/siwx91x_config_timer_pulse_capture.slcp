@@ -20,10 +20,9 @@ include:
 
 source:
 - path: ../src/app.c
-- path: ../src/main.c
     
 component:
-  - id: sl_system
+  - id: sl_main
   - id: status
   - id: syscalls
     from: wiseconnect3_sdk
@@ -36,7 +35,7 @@ component:
 
 sdk_extension:
   - id: wiseconnect3_sdk
-    version: 3.4.2
+    version: 3.5.0
 
 configuration: 
   - name: CONFIG_TIMER_UC

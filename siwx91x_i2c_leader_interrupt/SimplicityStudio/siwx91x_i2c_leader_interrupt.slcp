@@ -27,7 +27,6 @@ other_file:
 
 source:
 - path: ../src/app.c
-- path: ../src/main.c
 - path: ../src/i2c_leader_interrupt.c
 
 include:
@@ -37,7 +36,7 @@ include:
     - path: i2c_leader_interrupt.h
 
 component:
-  - id: sl_system
+  - id: sl_main
   - id: status
   - id: syscalls
     from: wiseconnect3_sdk
@@ -50,7 +49,7 @@ component:
 
 sdk_extension:
   - id: wiseconnect3_sdk
-    version: 3.4.2
+    version: 3.5.0
 
 ui_hints:
   highlight:

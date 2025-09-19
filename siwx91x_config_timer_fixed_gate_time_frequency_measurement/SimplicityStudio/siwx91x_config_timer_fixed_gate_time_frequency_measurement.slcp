@@ -1,10 +1,10 @@
-project_name: siwx91x_config_timer_period_measurement
-label: Peripheral Example - Config Timer - Period Measurement
+project_name: siwx91x_config_timer_fixed_gate_time_frequency_measurement
+label: Peripheral Example - Config Timer - Fixed Gate Time Frequency Measurement
 description: >
-  This application demonstrates how to configure the config timer to measure the period of a signal on GPIO pin.
-  The GPIO pin is configured as an input and the config timer is set to capture every two falling edges of the signal.
+  This application demonstrates how to use the config timer to implement a fixed gate time frequency measurement. The config timer is configured to generate an interrupt on overflow, and all signal edges on a GPIO input pin are counted before the overflow occurs.
+  This allows measurement of the number of edges within each fixed gate time interval defined by the timer overflow.
 
-category: example|Platform
+category: Example|Platform
 
 filter:
 - name: Device Type
@@ -21,7 +21,6 @@ readme:
 
 source:
 - path: ../src/app.c
-- path: ../src/main.c
 
 include:
   - path: '../inc'

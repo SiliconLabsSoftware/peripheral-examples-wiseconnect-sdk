@@ -1,12 +1,13 @@
-#  Peripheral Example - I2C - Leader with Interrupts
+# Peripheral Example - I2C - Leader with Interrupts #
 
 ![Type badge](https://img.shields.io/badge/Type-Application%20Examples-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Peripheral-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-42.82%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-20.7%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-45.75%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-20.68%20KB-blue)
+
 ## Purpose/Scope ##
 
 The application demonstrates the data transfer from Leader to Follower and then Follower to Leader utilizing I2C. After the round-trip transmission, the input and output data are compared to verify the integrity of the communication, and the result of this comparison is printed on the console.
@@ -26,7 +27,7 @@ The application demonstrates the data transfer from Leader to Follower and then 
 
 ## SDK version ##
 
-- [SiSDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [SiSDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ## How It Works ##
 
@@ -38,7 +39,7 @@ This example code demonstrates I2C data transfer between a Leader and Follower u
 
 - Now `i2c_write_buffer` is filled with some data, which needs to be sent to the Follower.
 
-- In while loop, `i2c_leader_interrupt_process_action` API is running continuously. 
+- In while loop, `i2c_leader_interrupt_process_action` API is running continuously.
 
 - Current_mode enum is set to I2C_SEND_DATA, and it calls `i2c_send_data` API to send data to the the Follower and configures the Follower address through `sl_si91x_i2c_set_follower_address` for Application.
 
@@ -68,8 +69,8 @@ This example code demonstrates I2C data transfer between a Leader and Follower u
 - Simplicity Studio
   - Download the [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
   - Follow the [Simplicity Studio User Guide](https://docs.silabs.com/simplicity-studio-5-users-guide/1.1.0/ss-5-users-guide-getting-started/install-ss-5-and-software#install-ssv5) to install Simplicity Studio IDE
-- [Simplicity SDK Version 2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2024.12.0)
-- [WiSeConnect 3.4.2 SDK](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.4.2)
+- [Simplicity SDK Version 2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [WiSeConnect 3.5.0 SDK](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.0)
 
 ### Hardware Requirements ###
 
@@ -111,9 +112,9 @@ You can only create a project based on an example project.
 > [!TIP]
 > Refer to [this](https://github.com/SiliconLabs/wiseconnect/tree/master/examples/si91x_soc/peripheral/sl_si91x_i2c_driver_follower) to compile and run the I2C application for Follower mode.
 
-## Application Build Environment
+## Application Build Environment ##
 
-### Application Configuration Parameters
+### Application Configuration Parameters ###
 
 - After creating the project, configure the following macros in `i2c_leader_interrupt.c` file. Update or modify the following macros, if required.
 
@@ -149,3 +150,9 @@ Refer to the instructions [here](https://docs.silabs.com/wiseconnect/latest/wise
 6. After successful program execution, the outputs on the serial console looks as shown below.
 
    ![Figure: Output](image/output.png)
+
+## Reporting Bugs/Issues and Posting Questions and Comments ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of this repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of this repo.

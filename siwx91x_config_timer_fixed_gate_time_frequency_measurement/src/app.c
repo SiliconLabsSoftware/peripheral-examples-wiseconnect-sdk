@@ -34,43 +34,48 @@
  ******************************************************************************/
 #include "rsi_rom_egpio.h"
 #include "rsi_rom_clks.h"
-#include "rsi_ct.h"
-#include "rsi_pll.h"
-#include "rsi_debug.h"
 #include "clock_update.h"
+#include "rsi_egpio.h"
+#include "rsi_debug.h"
+#include "rsi_ct.h"
 
 #define SL_SI91X_REQUIRES_INTF_PLL
 
-#define CONFIG_TIMER_INPUT_GPIO_PORT  RTE_SCT_IN_0_PORT
-#define CONFIG_TIMER_INPUT_GPIO_PIN   RTE_SCT_IN_0_PIN
-#define CONFIG_TIMER_INPUT_GPIO_PAD   RTE_SCT_IN_0_PAD
-#define CONFIG_TIMER_0_BASE_ADD       CT0
-#define CONFIG_TIMER_IRQHandler       IRQ034_Handler
-#define FALLING_EDGE_EVENT            0x05
+#define SL_GPIO_INTERRUPT_ENABLE          1
+#define SL_GPIO_INTERRUPT_DISABLE         0
 
-#define EDGE_CAPTURE_BUFFER_SIZE      2
-#define TOP_COUNTER_VALUE             0xFFFFFFFF // Top value for the timer/counter
-#define CONFIG_TIMER_FREQ             RSI_CLK_GetBaseClock(M4_CT)
+#define GPIO_INTERRUPT_PRIORITY0          52
+#define INTERRUPT_CLR                     0x07
 
-#define PLL_REF_CLK_VAL_XTAL          40000000UL
-#define INTF_PLL_FREQ                 160000000UL
+#define INTERRUPT_CHANNEL                 0
+#define MAX_GPIO_PORT_PIN                 16
+#define INPUT_EGPIO_PORT                  RTE_GPIO_25_PORT
+#define INPUT_EGPIO_PIN                   RTE_GPIO_25_PIN
+#define CONFIG_TIMER_INPUT_GPIO_PAD       RTE_SCT_IN_0_PAD
+#define CONFIG_TIMER_0_BASE_ADD           CT0
+#define CONFIG_TIMER_IRQHandler           IRQ034_Handler
+#define GPIO_PIN25_IRQHandler             IRQ052_Handler
+#define RISING_EDGE_EVENT                 0x01
 
-static volatile uint32_t edge_capture_buffer[EDGE_CAPTURE_BUFFER_SIZE];
-static volatile uint8_t edge_capture_index = 0;
+#define GATE_TIME_INTERVAL_SEC            10 // Should be changed depending on different cases
+#define TOP_COUNTER_VALUE                 (RSI_CLK_GetBaseClock(M4_CT) \
+                                           * GATE_TIME_INTERVAL_SEC)
+
+static volatile uint32_t edge_counts = 0;
+static volatile bool first_starting_edge = false;
 static volatile bool measurement_ready = false;
-static volatile bool counter_1_overflow = false;
-static volatile uint32_t period_measurement_us = 0;
+static volatile uint32_t estimated_frequency = 0;
 
-static void sl_config_timer_gpio_init(void);
+static void sl_gpio_init(void);
 static void sl_config_timer_init(void);
-static uint32_t calculate_period(void);
+static void RSI_EGPIO_CLK_init(void);
 
 /***************************************************************************/ /**
  * Initialize application.
  ******************************************************************************/
 void app_init(void)
 {
-  sl_config_timer_gpio_init();
+  sl_gpio_init();
   sl_config_timer_init();
 }
 
@@ -80,24 +85,40 @@ void app_init(void)
 void app_process_action(void)
 {
   if (measurement_ready) {
-    period_measurement_us = calculate_period();
+    estimated_frequency = edge_counts / GATE_TIME_INTERVAL_SEC;
+    measurement_ready = false;
+    first_starting_edge = true;
   }
 }
 
-static void sl_config_timer_gpio_init(void)
+static void sl_gpio_init(void)
 {
-  if ((CONFIG_TIMER_INPUT_GPIO_PIN > 24)
-      && (CONFIG_TIMER_INPUT_GPIO_PIN < 31)) {
-    RSI_EGPIO_HostPadsGpioModeEnable(RTE_SCT_IN_0_PIN);
+  RSI_EGPIO_CLK_init();
+
+  if ((INPUT_EGPIO_PIN > 24)
+      && (INPUT_EGPIO_PIN < 31)) {
+    RSI_EGPIO_HostPadsGpioModeEnable(INPUT_EGPIO_PIN);
   }
 
-  RSI_EGPIO_PadReceiverEnable(RTE_SCT_IN_0_PIN);
+  RSI_EGPIO_PadReceiverEnable(INPUT_EGPIO_PIN);
 
-  RSI_EGPIO_SetDir(EGPIO, CONFIG_TIMER_INPUT_GPIO_PORT,
-                   CONFIG_TIMER_INPUT_GPIO_PIN, EGPIO_CONFIG_DIR_INPUT);
+  RSI_EGPIO_SetDir(EGPIO, INPUT_EGPIO_PORT,
+                   INPUT_EGPIO_PIN, EGPIO_CONFIG_DIR_INPUT);
 
-  RSI_EGPIO_SetPinMux(EGPIO, CONFIG_TIMER_INPUT_GPIO_PORT,
-                      CONFIG_TIMER_INPUT_GPIO_PIN, RTE_SCT_IN_0_MUX);
+  NVIC_EnableIRQ(EGPIO_PIN_0_IRQn);
+
+  NVIC_SetPriority(EGPIO_PIN_0_IRQn, GPIO_INTERRUPT_PRIORITY0);
+
+  RSI_EGPIO_PinIntSel(EGPIO,
+                      INTERRUPT_CHANNEL,
+                      (INPUT_EGPIO_PIN
+                       > MAX_GPIO_PORT_PIN) ? (INPUT_EGPIO_PIN
+                                               / MAX_GPIO_PORT_PIN) : INPUT_EGPIO_PORT,
+                      INPUT_EGPIO_PIN);
+
+  RSI_EGPIO_SetIntRiseEdgeEnable(EGPIO, INTERRUPT_CHANNEL);
+
+  RSI_EGPIO_IntUnMask(EGPIO, INTERRUPT_CHANNEL);
 
   DEBUGOUT("Successfully set pin mode for GPIO_25\r\n");
 }
@@ -107,14 +128,11 @@ static void sl_config_timer_init(void)
   uint32_t ct_config_value = 0;
   uint32_t interrupt_flags = 0;
 
-  RSI_CLK_CtClkConfig(M4CLK, SCT_CLOCK_SOURCE, SCT_CLOCK_DIV_FACT,
+  RSI_CLK_CtClkConfig(M4CLK, CT_SOCPLLCLK, SCT_CLOCK_DIV_FACT,
                       ENABLE_STATIC_CLK);
 
-  RSI_CLK_SetIntfPllFreq(M4CLK, INTF_PLL_FREQ, PLL_REF_CLK_VAL_XTAL);
-
   ct_config_value = COUNTER32_BITMODE | PERIODIC_ENCOUNTER_0 | COUNTER0_UP;
-  interrupt_flags = RSI_CT_EVENT_INTR_0_l | RSI_CT_EVENT_COUNTER_0_IS_PEAK_l
-                    | RSI_CT_EVENT_COUNTER_1_IS_PEAK_l;
+  interrupt_flags = RSI_CT_EVENT_COUNTER_1_IS_PEAK_l;
 
   RSI_CT_SetControl(CONFIG_TIMER_0_BASE_ADD, ct_config_value);
   DEBUGOUT("Successfully set configuration for Config Timer\r\n");
@@ -131,50 +149,37 @@ static void sl_config_timer_init(void)
   NVIC_EnableIRQ(CT_IRQn);
   DEBUGOUT("Successfully enabled interrupt for Config Timer\r\n");
 
-  RSI_CT_InterruptEventSelect(CONFIG_TIMER_0_BASE_ADD, FALLING_EDGE_EVENT);
-  DEBUGOUT("Successfully selected interrupt action event for Config Timer\r\n");
-
-  RSI_CT_CaptureEventSelect(CONFIG_TIMER_0_BASE_ADD, FALLING_EDGE_EVENT);
-  DEBUGOUT("Successfully selected capture action event for Config Timer\r\n");
-
   RSI_CT_StartSoftwareTrig(CONFIG_TIMER_0_BASE_ADD, COUNTER_0);
   DEBUGOUT("Successfully started Config Timer\r\n");
+  first_starting_edge = true;
 }
 
-static uint32_t calculate_period(void)
+static void RSI_EGPIO_CLK_init(void)
 {
-  uint32_t counts_between_edges = 0;
-
-  if (edge_capture_buffer[1] < edge_capture_buffer[0]) {
-    counts_between_edges = TOP_COUNTER_VALUE - edge_capture_buffer[0] + 1
-                           + edge_capture_buffer[1];
-  } else {
-    counts_between_edges = edge_capture_buffer[1] - edge_capture_buffer[0];
-  }
-  measurement_ready = false;
-
-  return (counts_between_edges / (CONFIG_TIMER_FREQ / 1000000)); // Period in micro seconds
+  M4CLK->CLK_ENABLE_SET_REG3_b.EGPIO_CLK_ENABLE_b = 1;
+  M4CLK->CLK_ENABLE_SET_REG2_b.EGPIO_PCLK_ENABLE_b = 1;
 }
 
 void CONFIG_TIMER_IRQHandler(void)
 {
   uint32_t flag = RSI_CT_GetInterruptStatus(CONFIG_TIMER_0_BASE_ADD);
   RSI_CT_InterruptClear(CONFIG_TIMER_0_BASE_ADD, flag);
-  if (flag & RSI_CT_EVENT_COUNTER_1_IS_PEAK_l) {
-    counter_1_overflow = 1;
+
+  if (flag & RSI_CT_EVENT_COUNTER_0_IS_PEAK_l) {
+    measurement_ready = true;
+  }
+}
+
+void GPIO_PIN25_IRQHandler(void)
+{
+  RSI_EGPIO_IntClr(EGPIO, INTERRUPT_CHANNEL, INTERRUPT_CLR);
+
+  if (first_starting_edge) {
+    first_starting_edge = false;
+    edge_counts = 1; // First starting edge, therefore edge_counts starts at 1
+    RSI_CT_SetCount(CONFIG_TIMER_0_BASE_ADD, 1);
+    return;
   }
 
-  if ((flag & RSI_CT_EVENT_COUNTER_0_IS_PEAK_l) && counter_1_overflow) {
-    CONFIG_TIMER_0_BASE_ADD->CT_COUNTER_REG = 0;
-    counter_1_overflow = 0;
-  }
-
-  if (flag == RSI_CT_EVENT_INTR_0_l) {
-    edge_capture_buffer[edge_capture_index++] =
-      CONFIG_TIMER_0_BASE_ADD->CT_CAPTURE_REG;
-    if (edge_capture_index >= EDGE_CAPTURE_BUFFER_SIZE) {
-      edge_capture_index = 0;
-      measurement_ready = true;
-    }
-  }
+  edge_counts++;
 }

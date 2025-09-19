@@ -44,4 +44,32 @@
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Beginner"/>
   </descriptors>
+  <descriptors name="siwx91x_config_timer_fixed_gate_time_frequency_measurement" label="Peripheral Example - Config Timer - Fixed Gate Time Frequency Measurement" description="This application demonstrates how to use the config timer to implement a fixed gate time frequency measurement. The config timer is configured to generate an interrupt on overflow, and all signal edges on a GPIO input pin are counted before the overflow occurs.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="siwx91x_config_timer_fixed_gate_time_frequency_measurement/SimplicityStudio/siwx91x_config_timer_fixed_gate_time_frequency_measurement.slcp"/>
+    <properties key="readmeFiles" value="siwx91x_config_timer_fixed_gate_time_frequency_measurement/README.md"/>
+    <properties key="boardCompatibility" value="brd2605a brd4338a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917m111.*"/>
+    <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Example|Platform"/>
+    <properties key="quality" value="EVALUATION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Beginner"/>
+  </descriptors>
+  <descriptors name="siwx91x_config_timer_pwm_generator" label="Peripheral Example - Config Timer - PWM Generator" description="This application demonstrates how to configure the config timer to generate a PWM signal on a GPIO pin. The GPIO pin is configured as an output and the config timer is set to toggle the pin at a specific frequency and duty cycle.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="siwx91x_config_timer_pwm_generator/SimplicityStudio/siwx91x_config_timer_pwm_generator.slcp"/>
+    <properties key="readmeFiles" value="siwx91x_config_timer_pwm_generator/README.md"/>
+    <properties key="boardCompatibility" value="brd2605a brd4338a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917m111.*"/>
+    <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Example|Platform"/>
+    <properties key="quality" value="EVALUATION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Beginner"/>
+  </descriptors>
 </model:MDescriptors>
