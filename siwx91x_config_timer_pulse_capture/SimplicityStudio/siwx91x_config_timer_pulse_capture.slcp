@@ -1,17 +1,17 @@
 project_name: siwx91x_config_timer_pulse_capture
-package: platform
 label: Peripheral Example - Config Timer - Pulse Capture
 description: >
   This application demonstrates how to configure the config timer to capture an input pulse.
   The GPIO pin is configured as an input and the config timer is set to capture every falling edges of the signal.
+package: platform
 category: Example|Platform
 quality: evaluation
 
 filter:
-- name: Device Type
-  value: [SoC]
-- name: Project Difficulty
-  value: [Beginner]
+  - name: Device Type
+    value: [SoC]
+  - name: Project Difficulty
+    value: [Beginner]
 
 include:
   - path: ../inc
@@ -19,43 +19,24 @@ include:
     - path: app.h
 
 source:
-- path: ../src/app.c
+  - path: ../src/app.c
     
 component:
   - id: sl_main
   - id: status
   - id: syscalls
     from: wiseconnect3_sdk
-  - id: sl_gpio
-    from: wiseconnect3_sdk
   - id: si91x_memory_default_config
-    from: wiseconnect3_sdk
-  - id: si91x_debug_uc
     from: wiseconnect3_sdk
 
 sdk_extension:
   - id: wiseconnect3_sdk
-    version: 3.5.0
-
-configuration: 
-  - name: CONFIG_TIMER_UC
-    value: "1"
+    version: 3.5.2
 
 readme:
-- path: ../README.md
-
-other_file:
-  - path: ../image/brd2605a_connectors.png
-    directory: "image"
-  - path: ../image/brd4338a_connectors.png
-    directory: "image"
-  - path: ../image/breakout_pad_pin_mapping.png
-    directory: "image"
+  - path: ../README.md
 
 ui_hints:
   highlight:
-    - path: ../README.md
+    - path: README.md
       focus: true
-
-post_build:
-  path: ../utilities/postbuild_profile/wiseconnect_soc.slpb

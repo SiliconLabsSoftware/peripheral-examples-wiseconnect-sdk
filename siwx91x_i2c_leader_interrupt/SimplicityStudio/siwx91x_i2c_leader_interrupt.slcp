@@ -1,33 +1,16 @@
 project_name: siwx91x_i2c_leader_interrupt
 label: Peripheral Example - I2C - Leader with Interrupts
-
-package: platform
-category: Example|Platform
-quality: evaluation
-
 description: |
   This application demonstrates how to use the I2C interface on the Si91x SoC device utilizing Si91x's I2C peripheral APIs.
   It highlights the configuration of the I2C peripheral and shows how to send and receive data in a interrupt mode,
   which ensures that the system waits for a transaction to complete before proceeding to the next one.
-
-readme:
-- path: ../README.md
-
-other_file:
-  - path: ../image/setupdiagram.png
-    directory: "image"
-  - path: ../image/image507d.png
-    directory: "image"
-  - path: ../image/image507e.png
-    directory: "image"
-  - path: ../image/output.png
-    directory: "image"
-  - path: ../image/create_example.png
-    directory: "image"
+package: platform
+category: Example|Platform
+quality: evaluation
 
 source:
-- path: ../src/app.c
-- path: ../src/i2c_leader_interrupt.c
+  - path: ../src/app.c
+  - path: ../src/i2c_leader_interrupt.c
 
 include:
   - path: ../inc
@@ -47,13 +30,28 @@ component:
   - id: sl_clock_manager
     from: wiseconnect3_sdk
 
+readme:
+  - path: ../README.md
+
+other_file:
+  - path: ../image/setupdiagram.png
+    directory: "image"
+  - path: ../image/image507d.png
+    directory: "image"
+  - path: ../image/image507e.png
+    directory: "image"
+  - path: ../image/output.png
+    directory: "image"
+  - path: ../image/create_example.png
+    directory: "image"
+
 sdk_extension:
   - id: wiseconnect3_sdk
-    version: 3.5.0
+    version: 3.5.2
 
 ui_hints:
   highlight:
-    - path: ../README.md
+    - path: README.md
       focus: true
 
 post_build: 

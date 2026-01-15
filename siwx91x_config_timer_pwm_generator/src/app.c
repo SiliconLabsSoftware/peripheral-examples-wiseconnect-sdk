@@ -94,8 +94,6 @@ static void sl_config_timer_gpio_init(void)
                       CONFIG_TIMER_OUTPUT_GPIO_PORT,
                       CONFIG_TIMER_OUTPUT_GPIO_PIN,
                       CONFIG_TIMER_OUTPUT_GPIO_MUX);
-
-  DEBUGOUT("Successfully set pin mode for GPIO_25\r\n");
 }
 
 static void sl_config_timer_init(void)
@@ -111,26 +109,20 @@ static void sl_config_timer_init(void)
   ct_config = PERIODIC_ENCOUNTER_0 | COUNTER0_UP;
 
   RSI_CT_SetControl(CONFIG_TIMER_0_BASE_ADD, ct_config);
-  DEBUGOUT("Successfully set configuration for Config Timer\r\n");
 
   ct_pwm_config = OUTPUT_OCU_0 | MAKE_OUTPUT_0_HIGH_SEL_0
                   | MAKE_OUTPUT_0_LOW_SEL_0;
   RSI_CT_OCUConfigSet(CONFIG_TIMER_0_BASE_ADD, ct_pwm_config);
-  DEBUGOUT("Successfully set configuration for CT OCU\r\n");
 
   RSI_CT_SetCount(CONFIG_TIMER_0_BASE_ADD, 0);
-  DEBUGOUT("Successfully set CT Initial Count\n");
 
   RSI_CT_SetMatchCount(CONFIG_TIMER_0_BASE_ADD,
                        TOP_COUNTER_VALUE,
                        CONFIG_TIMER_COUNTER_16BIT_MODE,
                        COUNTER_0);
-  DEBUGOUT("Successfully set CT Match Count\n");
 
   CONFIG_TIMER_0_BASE_ADD->CT_OCU_COMPARE_REG_b.OCU_COMPARE_0_REG =
     OUTPUT_COMPARE_VALUE;
-  DEBUGOUT("Successfully set OCU compare value\r\n");
 
   RSI_CT_StartSoftwareTrig(CONFIG_TIMER_0_BASE_ADD, COUNTER_0);
-  DEBUGOUT("Successfully started Config Timer\r\n");
 }

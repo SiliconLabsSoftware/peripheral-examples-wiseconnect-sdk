@@ -36,7 +36,6 @@
 #include "rsi_rom_clks.h"
 #include "clock_update.h"
 #include "rsi_egpio.h"
-#include "rsi_debug.h"
 #include "rsi_ct.h"
 
 #define SL_SI91X_REQUIRES_INTF_PLL
@@ -119,8 +118,6 @@ static void sl_gpio_init(void)
   RSI_EGPIO_SetIntRiseEdgeEnable(EGPIO, INTERRUPT_CHANNEL);
 
   RSI_EGPIO_IntUnMask(EGPIO, INTERRUPT_CHANNEL);
-
-  DEBUGOUT("Successfully set pin mode for GPIO_25\r\n");
 }
 
 static void sl_config_timer_init(void)
@@ -135,22 +132,17 @@ static void sl_config_timer_init(void)
   interrupt_flags = RSI_CT_EVENT_COUNTER_1_IS_PEAK_l;
 
   RSI_CT_SetControl(CONFIG_TIMER_0_BASE_ADD, ct_config_value);
-  DEBUGOUT("Successfully set configuration for Config Timer\r\n");
 
   RSI_CT_PeripheralReset(CONFIG_TIMER_0_BASE_ADD, (boolean_t)COUNTER_0);
   RSI_CT_SetCount(CONFIG_TIMER_0_BASE_ADD, 0);
-  DEBUGOUT("Successfully set CT Initial Count\n");
 
   CONFIG_TIMER_0_BASE_ADD->CT_MATCH_REG = TOP_COUNTER_VALUE;
-  DEBUGOUT("Successfully set CT Match Count\n");
 
   RSI_CT_InterruptDisable(CONFIG_TIMER_0_BASE_ADD, interrupt_flags);
   RSI_CT_InterruptEnable(CONFIG_TIMER_0_BASE_ADD, interrupt_flags);
   NVIC_EnableIRQ(CT_IRQn);
-  DEBUGOUT("Successfully enabled interrupt for Config Timer\r\n");
 
   RSI_CT_StartSoftwareTrig(CONFIG_TIMER_0_BASE_ADD, COUNTER_0);
-  DEBUGOUT("Successfully started Config Timer\r\n");
   first_starting_edge = true;
 }
 

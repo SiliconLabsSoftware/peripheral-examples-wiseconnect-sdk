@@ -6,8 +6,8 @@
     <properties key="solutionReferenceId" value="siwx91x_config_timer_period_measurement.SimplicityStudio.siwx91x_config_timer_period_measurement.slcp"/>
     <properties key="projectFilePaths" value="siwx91x_config_timer_period_measurement/SimplicityStudio/siwx91x_config_timer_period_measurement.slcp"/>
     <properties key="readmeFiles" value="siwx91x_config_timer_period_measurement/README.md"/>
-    <properties key="boardCompatibility" value="brd2605a brd4338a com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*siwg917m111.*"/>
+    <properties key="boardCompatibility" value="brd2605a brd4338a brd2708a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917.*"/>
     <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
     <properties key="toolchainCompatibility" value="gcc iar segger"/>
     <properties key="category" value="Example|Platform"/>
@@ -21,8 +21,8 @@
     <properties key="solutionReferenceId" value="siwx91x_config_timer_pulse_capture.SimplicityStudio.siwx91x_config_timer_pulse_capture.slcp"/>
     <properties key="projectFilePaths" value="siwx91x_config_timer_pulse_capture/SimplicityStudio/siwx91x_config_timer_pulse_capture.slcp"/>
     <properties key="readmeFiles" value="siwx91x_config_timer_pulse_capture/README.md"/>
-    <properties key="boardCompatibility" value="brd2605a brd4338a com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*siwg917m111.*"/>
+    <properties key="boardCompatibility" value="brd2605a brd4338a brd2708a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917.*"/>
     <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
     <properties key="toolchainCompatibility" value="gcc iar segger"/>
     <properties key="category" value="Example|Platform"/>
@@ -49,8 +49,8 @@
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="siwx91x_config_timer_fixed_gate_time_frequency_measurement/SimplicityStudio/siwx91x_config_timer_fixed_gate_time_frequency_measurement.slcp"/>
     <properties key="readmeFiles" value="siwx91x_config_timer_fixed_gate_time_frequency_measurement/README.md"/>
-    <properties key="boardCompatibility" value="brd2605a brd4338a com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*siwg917m111.*"/>
+    <properties key="boardCompatibility" value="brd2605a brd4338a brd2708a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917.*"/>
     <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
     <properties key="toolchainCompatibility" value="gcc iar segger"/>
     <properties key="category" value="Example|Platform"/>
@@ -63,8 +63,8 @@
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="siwx91x_config_timer_pwm_generator/SimplicityStudio/siwx91x_config_timer_pwm_generator.slcp"/>
     <properties key="readmeFiles" value="siwx91x_config_timer_pwm_generator/README.md"/>
-    <properties key="boardCompatibility" value="brd2605a brd4338a com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*siwg917m111.*"/>
+    <properties key="boardCompatibility" value="brd2605a brd4338a brd2708a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917.*"/>
     <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
     <properties key="toolchainCompatibility" value="gcc iar segger"/>
     <properties key="category" value="Example|Platform"/>

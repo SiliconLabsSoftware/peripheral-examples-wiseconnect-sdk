@@ -1,19 +1,36 @@
-
-/***************************************************************************/ /**
+/***************************************************************************//**
  * @file app.c
- * @brief Top level application functions
+ * @brief Main application logic.
  *******************************************************************************
  * # License
- * <b>Copyright 2023 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
+ ********************************************************************************
+ *
+ * SPDX-License-Identifier: Zlib
+ *
+ * The licensor of this software is Silicon Laboratories Inc.
+ *
+ * This software is provided \'as-is\', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ *
  *******************************************************************************
- *
- * The licensor of this software is Silicon Laboratories Inc. Your use of this
- * software is governed by the terms of Silicon Labs Master Software License
- * Agreement (MSLA) available at
- * www.silabs.com/about-us/legal/master-software-license-agreement. This
- * software is distributed to you in Source Code format and is governed by the
- * sections of the MSLA applicable to Source Code.
- *
+ * # Experimental Quality
+ * This code has been minimally tested to ensure that it builds and is suitable
+ * as a demonstration for evaluation purposes only. This code will be maintained
+ * at the sole discretion of Silicon Labs.
  ******************************************************************************/
 #include "app.h"
 
@@ -21,7 +38,6 @@
 #include "rsi_rom_clks.h"
 #include "rsi_egpio.h"
 #include "rsi_ct.h"
-#include "rsi_debug.h"
 
 /*******************************************************************************
  ***************************  Defines / Macros  ********************************
@@ -39,7 +55,6 @@
  **********************  Local variables   *************************************
  ******************************************************************************/
 static volatile uint32_t capture_value;
-static volatile uint8_t data_ready;
 
 /*******************************************************************************
  **********************  Local Function prototypes   ***************************
@@ -50,7 +65,6 @@ void CONFIG_TIMER_IRQHandler(void)
   RSI_CT_InterruptClear(CONFIG_TIMER_0_BASE_ADD, flag);
   if (flag == RSI_CT_EVENT_INTR_0_l) {
     capture_value = CONFIG_TIMER_0_BASE_ADD->CT_CAPTURE_REG;
-    data_ready = 1;
   }
 }
 
@@ -76,8 +90,6 @@ static void gpio_init(void)
 
   RSI_EGPIO_SetPinMux(EGPIO, CONFIG_TIMER_INPUT_GPIO_PORT,
                       CONFIG_TIMER_INPUT_GPIO_PIN, RTE_SCT_IN_0_MUX);
-
-  DEBUGOUT("Successfully set pin mode for GPIO_25\r\n");
 }
 
 static void config_timer_init(void)
@@ -93,28 +105,21 @@ static void config_timer_init(void)
                     | RSI_CT_EVENT_COUNTER_1_IS_PEAK_l;
 
   RSI_CT_SetControl(CONFIG_TIMER_0_BASE_ADD, ct_config_value);
-  DEBUGOUT("Successfully set configuration for Config Timer\r\n");
 
   RSI_CT_PeripheralReset(CONFIG_TIMER_0_BASE_ADD, (boolean_t)COUNTER_0);
   RSI_CT_SetCount(CONFIG_TIMER_0_BASE_ADD, 0);
-  DEBUGOUT("Successfully set CT Initial Count\n");
 
   CONFIG_TIMER_0_BASE_ADD->CT_MATCH_REG = TOP_COUNTER_VALUE;
-  DEBUGOUT("Successfully set CT Match Count\n");
 
   RSI_CT_InterruptDisable(CONFIG_TIMER_0_BASE_ADD, interrupt_flags);
   RSI_CT_InterruptEnable(CONFIG_TIMER_0_BASE_ADD, interrupt_flags);
   NVIC_EnableIRQ(CT_IRQn);
-  DEBUGOUT("Successfully enabled interrupt for Config Timer\r\n");
 
   RSI_CT_InterruptEventSelect(CONFIG_TIMER_0_BASE_ADD, FALLING_EDGE_EVENT);
-  DEBUGOUT("Successfully selected interrupt action event for Config Timer\r\n");
 
   RSI_CT_CaptureEventSelect(CONFIG_TIMER_0_BASE_ADD, FALLING_EDGE_EVENT);
-  DEBUGOUT("Successfully selected capture action event for Config Timer\r\n");
 
   RSI_CT_StartSoftwareTrig(CONFIG_TIMER_0_BASE_ADD, COUNTER_0);
-  DEBUGOUT("Successfully started Config Timer\r\n");
 }
 
 /***************************************************************************//**
@@ -131,8 +136,4 @@ void app_init(void)
  ******************************************************************************/
 void app_process_action(void)
 {
-  if (data_ready) {
-    // clear flag here
-    DEBUGOUT("capture value %lu\n", capture_value);
-  }
 }

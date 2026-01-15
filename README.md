@@ -14,8 +14,9 @@
 # Silicon Labs SiWx91x Peripheral Applications #
 
 
-[![Version Badge](https://img.shields.io/badge/-v1.1.0-green)](https://github.com/SiliconLabs/peripheral-examples-wiseconnect-sdk/releases)
-[![SDK Badge](https://img.shields.io/badge/SiSDK-v2025.6.0-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
+[![Version Badge](https://img.shields.io/badge/-v1.2.0-green)](https://github.com/SiliconLabs/peripheral-examples-wiseconnect-sdk/releases)
+[![Si SDK Badge](https://img.shields.io/badge/SiSDK-v2025.6.2-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
+[![WiSeConnect SDK Badge](https://img.shields.io/badge/WSDK-v3.5.2-green)](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.2)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 
 The Silicon Labs WiseConnect SDK allows for a wide variety of applications to be built on its foundation. This repo showcases some example applications built using the Silicon Labs WiseConnect SDK.

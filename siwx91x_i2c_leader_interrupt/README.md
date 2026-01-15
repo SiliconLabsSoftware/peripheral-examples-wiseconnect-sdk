@@ -3,16 +3,17 @@
 ![Type badge](https://img.shields.io/badge/Type-Application%20Examples-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Peripheral-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-45.75%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-45.66%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-20.68%20KB-blue)
 
 ## Purpose/Scope ##
 
 The application demonstrates the data transfer from Leader to Follower and then Follower to Leader utilizing I2C. After the round-trip transmission, the input and output data are compared to verify the integrity of the communication, and the result of this comparison is printed on the console.
 
-> **Note:** The master-slave terminology is now replaced with Leader-Follower. Master is now recognized as Leader and slave is now recognized as Follower.
+> [!NOTE]
+> The master-slave terminology is now replaced with Leader-Follower. Master is now recognized as Leader and slave is now recognized as Follower.
 
 ## Overview ##
 
@@ -27,7 +28,81 @@ The application demonstrates the data transfer from Leader to Follower and then 
 
 ## SDK version ##
 
-- [SiSDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [SiSDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [WiSeConnect SDK v3.5.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.2)
+
+## Prerequisites ##
+
+### Software Requirements ###
+
+- Simplicity Studio
+  - Download the [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
+  - Follow the [Simplicity Studio User Guide](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-getting-started/install-ss-5-and-software) to install Simplicity Studio IDE
+- [Simplicity SDK Version 2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [WiSeConnect SDK v3.5.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.2)
+
+### Hardware Requirements ###
+
+- 2x [BRD4002A WSTK board](https://www.silabs.com/development-tools/wireless/wireless-pro-kit-mainboard?tab=overview) as a Follower or Leader
+
+- 2x [Wi-Fi Development Kit](https://www.silabs.com/development-tools/wireless/wi-fi) based on SiWG917 (e.g. [SIWX917-RB4338A](https://www.silabs.com/development-tools/wireless/wi-fi/siwx917-rb4338a-wifi-6-bluetooth-le-soc-radio-board)) as a Follower or Leader
+
+### Hardware Connection ###
+
+**ULP_I2C:**
+
+| PIN |   BRD4338A + BRD2605A      | Description                  |
+| --- | -------------------------- | ---------------------------- |
+| SCL | ULP_GPIO_7 [EXP_HEADER-15] |  Connect to Follower SCL pin |
+| SDA | ULP_GPIO_6 [EXP_HEADER-16] |  Connect to Follower SDA pin |
+
+![Figure: Pin Configuration I2C](image/image507d.png)
+
+![Figure: Pin Configuration I2C](image/image507e.png)
+
+## Setup ##
+
+**For Leader:**
+
+1. From the Launcher Home, add your board to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by *interrupt*.
+
+2. Click **Create** button on the **SL Si91x - I2C Transmission using I2C Interrupts** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
+
+   ![Create_example](image/create_example.png)
+
+3. Build and flash this example to the board.
+
+   ![Figure: Introduction](image/setupdiagram.png)
+
+**For Follower:**
+
+- Refer to [this](https://github.com/SiliconLabs/wiseconnect/tree/master/examples/si91x_soc/peripheral/sl_si91x_i2c_driver_follower) to compile and run the I2C application for Follower mode.
+
+## Application Build Environment ##
+
+### Application Configuration Parameters ###
+
+- After creating the project, configure the following macros in `i2c_leader_interrupt.c` file. Update or modify the following macros, if required.
+
+    ```c
+      #define I2C_USED                    // Update it with I2C instance number used for this application: 0 for I2C0, 1 for I2C1 and 2 for I2C2
+      #define FOLLOWER_I2C_ADDR           // Update I2C follower address
+      #define I2C_BUFFER_SIZE             // To change the number of bytes to send and receive.Its value should be less than maximum buffer size macro value.
+    ```
+
+- Configure mode, operating-mode, and transfer-type of I2C instance by modifying the following code snippet.
+- Change `config.mode` to 'Leader mode'.
+- Change `config.clhr` as per bus-speed requirement.
+
+    ```c
+      config.clhr = SL_I2C_FAST_PLUS_BUS_SPEED;   // Update this value to choose desired I2C bus speed.
+      config.mode = SL_I2C_LEADER_MODE;           // Update this value to change between Leader and Follower mode
+    ```
+  
+> **Note:** After completing the above configurations, connect the SCL and SDA pins of Leader and Follower and run the application. Observe the results by connecting SDA and SCL pins to the Logic Analyzer. (If required, enable the glitch filter for the SCL channel with time period 100ns,to avoid glitches).
+
+- For getting proper speeds with Fast Mode and Fast Mode Plus, use external pullup of around 4.7K.
+- For high-speed mode data transfer external pullup is a must.
 
 ## How It Works ##
 
@@ -57,86 +132,10 @@ This example code demonstrates I2C data transfer between a Leader and Follower u
 
 - The I2C driver enters I2C_TRANSMISSION_COMPLETED mode and stays idle.
 
-> **Note:**
+> [!NOTE]
 >
->- I2C has three instances (I2C0, I2C1, and ULP_I2C). This example only demonstrates the use case using ULP_I2C (I2C2).
->- I2C0, I2C1 are not working as expected.
-
-## Prerequisites ##
-
-### Software Requirements ###
-
-- Simplicity Studio
-  - Download the [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
-  - Follow the [Simplicity Studio User Guide](https://docs.silabs.com/simplicity-studio-5-users-guide/1.1.0/ss-5-users-guide-getting-started/install-ss-5-and-software#install-ssv5) to install Simplicity Studio IDE
-- [Simplicity SDK Version 2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [WiSeConnect 3.5.0 SDK](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.0)
-
-### Hardware Requirements ###
-
-- Windows PC
-
-- 2x [BRD4002A WSTK board](https://www.silabs.com/development-tools/wireless/wireless-pro-kit-mainboard?tab=overview) as a Follower or Leader
-
-- 2x [Wi-Fi Development Kit](https://www.silabs.com/development-tools/wireless/wi-fi) based on SiWG917 (e.g. [SIWX917-RB4338A](https://www.silabs.com/development-tools/wireless/wi-fi/siwx917-rb4338a-wifi-6-bluetooth-le-soc-radio-board)) as a Follower or Leader
-
-### Hardware Connection ###
-
-**ULP_I2C:**
-
-| PIN |   BRD4338A + BRD2605A      | Description                  |
-| --- | -------------------------- | ---------------------------- |
-| SCL | ULP_GPIO_7 [EXP_HEADER-15] |  Connect to Follower SCL pin |
-| SDA | ULP_GPIO_6 [EXP_HEADER-16] |  Connect to Follower SDA pin |
-
-![Figure: Pin Configuration I2C](image/image507d.png)
-
-![Figure: Pin Configuration I2C](image/image507e.png)
-
-## Setup ##
-
-**For Leader:**
-
-You can only create a project based on an example project.
-
-1. From the Launcher Home, add your board to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project with filtering by *interrupt*.
-
-2. Click **Create** button on the **SL Si91x - I2C Transmission using I2C Interrupts** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-
-   ![Create_example](image/create_example.png)
-
-3. Build and flash this example to the board.
-![Figure: Introduction](image/setupdiagram.png)
-
-**For Follower:**
-> [!TIP]
-> Refer to [this](https://github.com/SiliconLabs/wiseconnect/tree/master/examples/si91x_soc/peripheral/sl_si91x_i2c_driver_follower) to compile and run the I2C application for Follower mode.
-
-## Application Build Environment ##
-
-### Application Configuration Parameters ###
-
-- After creating the project, configure the following macros in `i2c_leader_interrupt.c` file. Update or modify the following macros, if required.
-
-    ```c
-      #define I2C_USED                    // Update it with I2C instance number used for this application: 0 for I2C0, 1 for I2C1 and 2 for I2C2
-      #define FOLLOWER_I2C_ADDR           // Update I2C follower address
-      #define I2C_BUFFER_SIZE             // To change the number of bytes to send and receive.Its value should be less than maximum buffer size macro value.
-    ```
-
-- Configure mode, operating-mode, and transfer-type of I2C instance by modifying the following code snippet.
-- Change `config.mode` to 'Leader mode'.
-- Change `config.clhr` as per bus-speed requirement.
-
-    ```c
-      config.clhr = SL_I2C_FAST_PLUS_BUS_SPEED;   // Update this value to choose desired I2C bus speed.
-      config.mode = SL_I2C_LEADER_MODE;           // Update this value to change between Leader and Follower mode
-    ```
-  
-> **Note:** After completing the above configurations, connect the SCL and SDA pins of Leader and Follower and run the application. Observe the results by connecting SDA and SCL pins to the Logic Analyzer. (If required, enable the glitch filter for the SCL channel with time period 100ns,to avoid glitches).
-
-- For getting proper speeds with Fast Mode and Fast Mode Plus, use external pullup of around 4.7K.
-- For high-speed mode data transfer external pullup is a must.
+> - I2C has three instances (I2C0, I2C1, and ULP_I2C). This example only demonstrates the use case using ULP_I2C (I2C2).
+> - I2C0, I2C1 are not working as expected.
 
 ## Test the Application ##
 

@@ -3,24 +3,21 @@ label: Peripheral Example - Config Timer - Fixed Gate Time Frequency Measurement
 description: >
   This application demonstrates how to use the config timer to implement a fixed gate time frequency measurement. The config timer is configured to generate an interrupt on overflow, and all signal edges on a GPIO input pin are counted before the overflow occurs.
   This allows measurement of the number of edges within each fixed gate time interval defined by the timer overflow.
-
 category: Example|Platform
-
-filter:
-- name: Device Type
-  value: [SoC]
-- name: Project Difficulty
-  value: [Beginner]
-
 package: platform
-
 quality: evaluation
 
+filter:
+  - name: Device Type
+    value: [SoC]
+  - name: Project Difficulty
+    value: [Beginner]
+
 readme:
-- path: ../README.md
+  - path: ../README.md
 
 source:
-- path: ../src/app.c
+  - path: ../src/app.c
 
 include:
   - path: '../inc'
@@ -36,10 +33,6 @@ component:
     from: wiseconnect3_sdk
 
 other_file:
-  - path: ../image/brd2605a_connectors.png
-    directory: "image"
-  - path: ../image/brd4338a_connectors.png
-    directory: "image"
   - path: ../image/result.png
     directory: "image"
 
@@ -50,4 +43,4 @@ ui_hints:
 
 sdk_extension:
   - id: wiseconnect3_sdk
-    version: 3.5.0
+    version: 3.5.2
